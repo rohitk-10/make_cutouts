@@ -1,0 +1,14 @@
+*.py~
+*.fits
+*.txt
+*.eps
+*.png
+*.pyc
+*.html
+*.reg
+*~
+*/
+*Maximum*.ipynb
+MASTER*
+PanSTARRS*
+*.docx
