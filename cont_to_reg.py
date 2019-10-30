@@ -1,21 +1,3 @@
-# Script to write the contours segments from pyplot to ds9 region file for around a given LOFAR source
-# Commands to select directory based on hostname
-from socket import gethostname
-
-if gethostname() == 'colonsay':
-    path_start = '/disk1/rohitk/ELN1_project/'
-elif gethostname() == 'rohitk-elitebook':
-    path_start = '/home/rohitk/Documents/PhD/Year1/ELN1_project/'
-
-#################################################
-# Add the path of useful functions at the start
-import sys
-sys.path.append(path_start+'basic_functions')
-from useful_functions import return_hist_par, varstat, latest_dir, jytoabmag, field_filter
-from plot_func import rc_def, make_fig, make_fig_multi
-rc_def()
-##################################################
-
 import numpy as np
 from matplotlib import pyplot as plt
 
