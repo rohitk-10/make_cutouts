@@ -50,7 +50,9 @@ def crop_write_fits(hdu_list, original_wcs, original_data, xcrop_array, ycrop_ar
 img_dict = dict()
 img_dict["i"] = "/disk3/rohitk/ELAIS_opt_swarped/iband_fits/EN1band_swarped/final/EL_EN1_iband.fits"
 img_dict["sw2"] = "/disk3/rohitk/ELAIS_opt_swarped/sw2band_fits/EN1band_swarped/final/EL_EN1_sw2band.fits"
+img_dict["radio"] = "/disk1/rohitk/ELN1_project/ELAIS-N1/image_full_ampphase_di_m.NS_shift.int.facetRestored.blanked-crop.fits"
 
+# These are the optical and IR chi2 data
 # img_dict["chi2o"] = "/disk3/rohitk/ELAIS_opt_swarped/chi2_ind_ugrizJK/EN1band_swarped/final/EL_EN1_chi2_ugrizJK.fits"
 # img_dict["chi2s"] = "/disk3/rohitk/ELAIS_opt_swarped/chi2_ind_swse/EN1band_swarped/final/EL_EN1_chi2_swse.fits"
 
@@ -90,15 +92,13 @@ for ii in range(len(prefilt_out)):
     corner_coord = cent_coord.directional_offset_by(pa_pattern*u.deg, sep_pattern*u.arcsec)
 
     for phot_band in filts:
-        img_to_crop = img_dict[phot_band]
-
-        hdul = fits.open(img_to_crop)
-        img_wcs = wcs.WCS(hdul[0].header, hdul).celestial
-
         # Name the section based on Source_Name and phot_band
         crop_img_name = BASE_OUT + "/" + prefilt_out["Source_Name"][ii] + "_" + phot_band + ".fits"
+        img_to_crop = img_dict[phot_band]
 
         if not os.path.exists(crop_img_name):
+            hdul = fits.open(img_to_crop)
+            img_wcs = wcs.WCS(hdul[0].header, hdul).celestial
 
             print(crop_img_name)
 
@@ -109,6 +109,9 @@ for ii in range(len(prefilt_out)):
             xr = slice(int(np.round(xc[0])), int(np.floor(xc[1])))
             yr = slice(int(np.round(yc[0])), int(np.floor(yc[1])))
 
-            crop_write_fits(hdul, img_wcs, hdul[0].data, xr, yr, crop_img_name)
+            if phot_band != "radio":
+                crop_write_fits(hdul, img_wcs, hdul[0].data, xr, yr, crop_img_name)
+            else:
+                crop_write_fits(hdul, img_wcs, hdul[0].data[0, 0, :, :], xr, yr, crop_img_name)
 
 print(time.time() - ts)
