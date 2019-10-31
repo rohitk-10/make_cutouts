@@ -1,0 +1,9 @@
+1 Compact radio source with secure IR ID
+2 Compact radio source with secure optical ID
+3 Large/extended radio source with secure IR ID
+4 Large/extended radio source with secure IR ID
+5 Compact radio source - cannot trust ID
+6 Large/extended radio source - cannot trust ID
+7 ID not visible in optical - incorrect ID
+8 ID not visible in IR - incorrect ID
+9 ID not visible in optical or IR - found ID is of nearby source, incorrect

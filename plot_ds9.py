@@ -102,36 +102,6 @@ if not os.path.exists(fin_fname):
     # Get the region with the radio RA DEC position
     make_ds9_reg(ra_s.tolist()[0], dec_s.tolist()[0], "{0}pos_{1}_RADIO_{2}.reg".format(OUTDIR_POS, ind_to_plot, prefilt_out["Source_Name"][ind_to_plot]), "red", "radpos")
 
-    # Now plot the Gaussian ellipses too
-    gaussians_fname = "/disk1/rohitk/ELN1_project/ELAIS-N1/image_full_ampphase_di_m.NS_shift.int.facetRestored.blanked.scaled-crop.pybdsm.gaul.ds9.reg"
-    good_lines, start_lines = [], []
-    ra_g, dec_g = [], []
-
-    with open(gaussians_fname, "r") as fin:
-        lines = fin.read().splitlines()
-        for line in lines:
-            if line.startswith("ellipse"):
-                good_lines.append(line.split(" # ")[0])
-                pos_list = line.split('ellipse(')[1].split(",")[:2]
-                ra_g.append(pos_list[0])
-                dec_g.append(pos_list[1])
-            else:
-                start_lines.append(line)
-
-    ra_g = np.asfarray(ra_g)
-    dec_g = np.asfarray(dec_g)
-
-    # Cross-match to the position of the radio source
-    gaus_reg_coords = SkyCoord(ra_g, dec_g, unit='deg', frame='icrs')
-    gind_to_write = cent_coord.separation(gaus_reg_coords).to(u.arcsec).value < 150.
-
-    gaus_reg_fname = "{0}ellipse_{1}.reg".format(OUTDIR_POS, prefilt_out["Source_Name"][ind_to_plot])
-    with open(gaus_reg_fname, "w") as fout:
-        for line in start_lines:
-            fout.write(line + "\n")
-        for line in np.array(good_lines)[gind_to_write].tolist():
-            fout.write(line + "\n")
-
     print("Went through everything!")
 
 # If instead all files exist, then skip the above and go straight to plotting
@@ -165,6 +135,11 @@ os.system("ds9 {0}/{1}_radio.fits -zscale {0}/{1}_i.fits -zscale {0}/{1}_sw2.fit
 # Now ask for input on the flag for this source
 print("***** Now enter some flag here which you can define later ***** \n",
       "***** This will be added to 'Notes' column 		 *****\n")
+
+if "Sep" in prefilt_out.colnames:
+    print("Separation between radio source and visual click: {0} arcsec".format(prefilt_out["Sep"][ind_to_plot]))
+if "z1_median" in prefilt_out.colnames:
+    print("Redshift of radio source (best possible radio source): {0}".format(prefilt_out["z1_median"][ind_to_plot]))
 
 flag_update = int(float(input("Enter the flag for this source. If not sure, enter '-2' to move on: ")))
 
