@@ -148,7 +148,7 @@ os.system("cp {0}/ellipse_{1}.reg {2}".format(OUTDIR_POS, prefilt_out["Source_Na
 print("***** Plotting source: #{0}: {1} *****\n".format(ind_to_plot, prefilt_out["Source_Name"][ind_to_plot]))
 
 # Show the ds9 plot of sources
-os.system("ds9 {0}/{1}_radio.fits {0}/{1}_i.fits {0}/{1}_sw2.fits -regions load all '{2}*.reg' &".format("opt_mir_imgs", prefilt_out["Source_Name"][ind_to_plot], POS_LATEST))
+os.system("ds9 {0}/{1}_radio.fits -zscale {0}/{1}_i.fits -zscale {0}/{1}_sw2.fits -zscale -match frame wcs -regions load all '{2}*.reg' &".format("opt_mir_imgs", prefilt_out["Source_Name"][ind_to_plot], POS_LATEST))
 
 # Also the png plot
 # os.system("display {0}_j.png & ".format(prefilt_out["Source_Name"][ind_to_plot]))
