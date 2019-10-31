@@ -16,6 +16,15 @@ import time
 import os
 ###################################################
 
+"""
+Scipt to plot radio and optical/IR images onto ds9 and show:
+	1. Radio Gaussians (in cyan ellipses)
+	2. Radio contours (green regions)
+	3. Radio source position (marked by red cross)
+	4. Optical/IR catalogue detections (marked by small green circles)
+	5. Optical host galaxy position found by LR or visual classification (cyan cross)
+"""
+
 
 def make_ds9_reg(ra_positions, dec_positions, output_regfile, marker_colours, lr_marker=None):
     first_regline = "# Region file format: DS9 version 4.1"
