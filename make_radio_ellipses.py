@@ -34,7 +34,7 @@ Script to make radio source ellipses from the final catalogue based on a list of
 """
 
 
-def make_ds9_reg(ra_positions, dec_positions, major_rad, minor_rad, pa, output_regfile, marker_colours):
+def make_ds9_reg(ra_positions, dec_positions, major_rad, minor_rad, pa, output_regfile, marker_colours, lgz_size, lgz_width, lgz_pa):
     first_regline = "# Region file format: DS9 version 4.1"
     global_reg_def = 'global color={0} dashlist=8 3 width=2 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1'.format(marker_colours)
 
@@ -44,8 +44,12 @@ def make_ds9_reg(ra_positions, dec_positions, major_rad, minor_rad, pa, output_r
         fout.write("fk5\n")
 
         for ii, ra in enumerate(ra_positions):
-            fout.write('ellipse({0},{1},{2}",{3}",{4})\n'.format(ra, dec_positions[ii],
-                                                                 major_rad[ii], minor_rad[ii], pa[ii]))
+            if np.isnan(lgz_size[ii]) or np.isnan(lgz_width[ii]) or np.isnan(lgz_pa[ii]):
+                fout.write('ellipse({0},{1},{2}",{3}",{4})\n'.format(ra, dec_positions[ii],
+                                                                     major_rad[ii], minor_rad[ii], pa[ii]))
+            else:
+                fout.write('ellipse({0},{1},{2}",{3}",{4})\n'.format(ra, dec_positions[ii],
+                                                                     lgz_size[ii], lgz_width[ii], lgz_pa[ii]))
 
     return
 
@@ -77,5 +81,6 @@ for k in range(len(cata)):
         fin_near_cent = cent_coord.separation(final_coords).arcsec < srad
         print(np.sum(fin_near_cent))
         # Now write ellipses for all sources in fin_near_cent
-        make_ds9_reg(mlfin_srl["RA"][fin_near_cent].tolist(), mlfin_srl["DEC"][fin_near_cent].tolist(), (mlfin_srl["Maj"]*3600).tolist(),
-                     (mlfin_srl["Min"]*3600).tolist(), (mlfin_srl["PA"]+90).tolist(), fin_fname, "cyan")
+        make_ds9_reg(mlfin_srl["RA"][fin_near_cent].tolist(), mlfin_srl["DEC"][fin_near_cent].tolist(), (mlfin_srl["Maj"][fin_near_cent]*3600).tolist(),
+                     (mlfin_srl["Min"][fin_near_cent]*3600).tolist(), (mlfin_srl["PA"][fin_near_cent]+90).tolist(), fin_fname, "cyan",
+                     mlfin_srl["LGZ_Size"][fin_near_cent].tolist(), mlfin_srl["LGZ_Width"][fin_near_cent].tolist(), (mlfin_srl["LGZ_PA"][fin_near_cent]+90).tolist())

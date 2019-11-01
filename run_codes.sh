@@ -5,4 +5,4 @@ ipython make_radio_ellipses.py	# Make ellipses of radio sources in workflow.txt 
 ipython cont_to_reg.py  	# Make contours of sources in workflow.txt
 ipython crop_im_additional.py	# Make cutouts of radio and N optical/IR images
 # Now that everything is set-up, run plot_ds9.py to view each source
-ipython plot_ds9.py
+# ipython plot_ds9.py
