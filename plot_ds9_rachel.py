@@ -133,7 +133,7 @@ os.system("cp {0}/ellipse_{1}.reg {2}".format(OUTDIR_POS, prefilt_out["Source_Na
 print("***** Plotting source: #{0}: {1} *****\n".format(ind_to_plot, prefilt_out["Source_Name"][ind_to_plot]))
 
 # Show the ds9 plot of sources
-os.system("ds9 {0}/{1}_radio.fits -zscale {0}/{1}_i.fits -zscale {0}/{1}_sw2.fits -zscale -match frame wcs -regions load all '{2}*.reg' -regions load all EN1_radio_cool_sources_pos.reg &".format("opt_mir_imgs", prefilt_out["Source_Name"][ind_to_plot], POS_LATEST))
+os.system("ds9 {0}/{1}_radio.fits -zscale {0}/{1}_i.fits -zscale {0}/{1}_sw2.fits -zscale -match frame wcs -regions load all '{2}*.reg' &".format("opt_mir_imgs", prefilt_out["Source_Name"][ind_to_plot], POS_LATEST))
 
 # Also the png plot
 # os.system("display {0}_j.png & ".format(prefilt_out["Source_Name"][ind_to_plot]))
@@ -145,7 +145,7 @@ print("***** Now enter some flag here which you can define later ***** \n",
 if "Sep" in prefilt_out.colnames:
     print("Separation between radio source and visual click: {0} arcsec".format(prefilt_out["Sep"][ind_to_plot]))
 if "z1_median" in prefilt_out.colnames:
-    print("Redshift of radio source (best possible radio source): {0}".format(prefilt_out["z1_median"][ind_to_plot]))
+    print("Redshift of above radio source (best possible radio source): {0}".format(prefilt_out["z1_median"][ind_to_plot]))
 
 flag_update = int(float(input("Enter the flag for this source. If not sure, enter '-2' to move on: ")))
 

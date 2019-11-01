@@ -58,7 +58,7 @@ final_fname = glob.glob("/disk3/rohitk/final_raido_catalogues/EN1/final-v*.fits"
 mlfin_srl = Table.read(final_fname, character_as_bytes=False)
 
 # Workflow
-cata = Table.read("workflow.txt", format='ascii')
+cata = Table.read("../cool_sources/workflow.txt", format='ascii')
 
 wflow_coords = SkyCoord(cata["RA"], cata["DEC"], unit='deg', frame='icrs')
 final_coords = SkyCoord(mlfin_srl["RA"], mlfin_srl["DEC"], unit='deg', frame='icrs')
@@ -75,6 +75,7 @@ for k in range(len(cata)):
         print(fin_fname)
         cent_coord = SkyCoord(cata["RA"][k], cata["DEC"][k], unit='deg', frame='icrs')
         fin_near_cent = cent_coord.separation(final_coords).arcsec < srad
+        print(np.sum(fin_near_cent))
         # Now write ellipses for all sources in fin_near_cent
         make_ds9_reg(mlfin_srl["RA"][fin_near_cent].tolist(), mlfin_srl["DEC"][fin_near_cent].tolist(), (mlfin_srl["Maj"]*3600).tolist(),
                      (mlfin_srl["Min"]*3600).tolist(), (mlfin_srl["PA"]+90).tolist(), fin_fname, "cyan")

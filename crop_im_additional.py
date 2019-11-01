@@ -48,8 +48,8 @@ def crop_write_fits(hdu_list, original_wcs, original_data, xcrop_array, ycrop_ar
 
 
 img_dict = dict()
-# img_dict["i"] = "/disk3/rohitk/ELAIS_opt_swarped/iband_fits/EN1band_swarped/final/EL_EN1_iband.fits"
-# img_dict["sw2"] = "/disk3/rohitk/ELAIS_opt_swarped/sw2band_fits/EN1band_swarped/final/EL_EN1_sw2band.fits"
+img_dict["i"] = "/disk3/rohitk/ELAIS_opt_swarped/iband_fits/EN1band_swarped/final/EL_EN1_iband.fits"
+img_dict["sw2"] = "/disk3/rohitk/ELAIS_opt_swarped/sw2band_fits/EN1band_swarped/final/EL_EN1_sw2band.fits"
 img_dict["radio"] = "/disk1/rohitk/ELN1_project/ELAIS-N1/image_full_ampphase_di_m.NS_shift.int.facetRestored.blanked-crop.fits"
 
 # These are the optical and IR chi2 data
@@ -71,7 +71,7 @@ mlfin_srl = Table.read(final_fname, character_as_bytes=False)
 prefilt_out = Table.read("workflow.txt", format='ascii')
 # prefilt_out = prefilt_out[(prefilt_out["Notes"] != -99) & (prefilt_out["Notes"] != -1)]
 
-print("No. of new imgs to crop: {0}".format(len(prefilt_out)))
+# print("No. of new imgs to crop: {0}".format(len(prefilt_out)))
 
 ts = time.time()
 
@@ -88,7 +88,7 @@ for ii in range(len(prefilt_out)):
     cent_coord = SkyCoord(ra, dec, unit='deg', frame='icrs')
 
     pa_pattern = [-135, 45]
-    sep_pattern = [100, 100]
+    sep_pattern = [200, 200]
     corner_coord = cent_coord.directional_offset_by(pa_pattern*u.deg, sep_pattern*u.arcsec)
 
     for phot_band in filts:
@@ -96,7 +96,10 @@ for ii in range(len(prefilt_out)):
         if phot_band == "radio":
             sep_pattern = [400, 400]
             corner_coord = cent_coord.directional_offset_by(pa_pattern*u.deg, sep_pattern*u.arcsec)
-        # Name the section based on Source_Name and phot_band
+        else:
+            sep_pattern = [300, 300]
+            corner_coord = cent_coord.directional_offset_by(pa_pattern*u.deg, sep_pattern*u.arcsec)
+            # Name the section based on Source_Name and phot_band
         crop_img_name = BASE_OUT + "/" + prefilt_out["Source_Name"][ii] + "_" + phot_band + ".fits"
         img_to_crop = img_dict[phot_band]
 
